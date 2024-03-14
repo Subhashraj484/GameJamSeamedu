@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
         inputManager.Jump += Jump;
         rb = GetComponent<Rigidbody2D>();
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
-
+        rb.freezeRotation = true;
 
         if(inverseGravity) 
         {
