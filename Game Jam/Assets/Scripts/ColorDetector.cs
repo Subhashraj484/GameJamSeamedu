@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class ColorDetector : MonoBehaviour
 {
     float timer ;
     List<Color> colors = new();
@@ -15,6 +16,7 @@ public class NewBehaviourScript : MonoBehaviour
     SpriteRenderer spriteRenderer;
     bool colormatch;
     bool changeColor;
+    bool hide;
 
     [SerializeField] float tolerance = 0.8f;
     [SerializeField] float colorDuration = 1.5f;
@@ -32,6 +34,7 @@ public class NewBehaviourScript : MonoBehaviour
         {
             changeColor = true;
             spriteRenderer.color = buildingColor;
+            hide = true;
 
             
         }
@@ -47,6 +50,7 @@ public class NewBehaviourScript : MonoBehaviour
                 spriteRenderer.color = originalColor;
                 currentCollidedBuilding = null;
                 changeColor = false;
+                hide = false;
             }
         }
 
@@ -87,6 +91,7 @@ public class NewBehaviourScript : MonoBehaviour
             if(currentCollidedBuilding != other.transform) return;
 
             spriteRenderer.color = originalColor;
+            hide = false;
         }
     }
 
@@ -114,4 +119,6 @@ public class NewBehaviourScript : MonoBehaviour
         // Check if the squared magnitude is within the tolerance
         return colorDifference <= tolerance * tolerance;
     }
+
+    public bool Hidden => hide;
 }
