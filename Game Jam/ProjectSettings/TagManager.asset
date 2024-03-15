@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Color
   - Building
+  - MoveTile
   layers:
   - Default
   - TransparentFX
