@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class ColorDetector : MonoBehaviour
 {
-    public event Action<Color> OnChnageColor;
+    public event Action<Color> OnColorChange;
     float timer ;
     List<Color> colors = new();
     Color originalColor;
@@ -20,8 +22,8 @@ public class ColorDetector : MonoBehaviour
     [SerializeField] float colorDuration = 1.5f;
 
     private void Start() {
-        originalColor = GetComponent<SpriteRenderer>().color;
         spriteRenderer = GetComponent<SpriteRenderer>();
+        originalColor = GetComponent<SpriteRenderer>().color;
     }
 
     void Update()
@@ -30,9 +32,11 @@ public class ColorDetector : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.LeftShift))
         {
+                OnColorChange?.Invoke(buildingColor);
+
             changeColor = true;
-            // spriteRenderer.color = buildingColor;
-                OnChnageColor?.Invoke(buildingColor);
+
+             //spriteRenderer.color = buildingColor;
 
             hide = true;
 
@@ -47,8 +51,9 @@ public class ColorDetector : MonoBehaviour
             {
                 timer = 0;
                 colormatch = false;
-                // spriteRenderer.color = originalColor;
-                OnChnageColor?.Invoke(originalColor);
+                OnColorChange?.Invoke(originalColor);
+
+                 //spriteRenderer.color = originalColor;
 
                 currentCollidedBuilding = null;
                 changeColor = false;
@@ -72,15 +77,18 @@ public class ColorDetector : MonoBehaviour
                 if(colors.Contains(currentColor)) return;
 
                 colors.Add(currentColor);
-                Destroy(other.gameObject);
+                Destroy(other.gameObject , 2f);
+                other.gameObject.SetActive(false);
             }
         }
 
         if(other.transform.CompareTag("Building"))
         {
+
             currentCollidedBuilding = other.transform;
             buildingColor = other.gameObject.GetComponent<SpriteRenderer>().color;
             colormatch = CheckForoColors(buildingColor);
+
         }
     }
 
@@ -91,9 +99,8 @@ public class ColorDetector : MonoBehaviour
         if(other.transform.CompareTag("Building"))
         {
             if(currentCollidedBuilding != other.transform) return;
-
-            // spriteRenderer.color = originalColor;
-                OnChnageColor?.Invoke(originalColor);
+                OnColorChange?.Invoke(originalColor);
+             //spriteRenderer.color = originalColor;
 
             hide = false;
         }

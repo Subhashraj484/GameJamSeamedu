@@ -23,6 +23,7 @@ public class Detector : MonoBehaviour
     RaycastHit2D hitinfoPlayer2;
     int currentIndex =0;
     float testangle;
+    float dis;
 
     
 
@@ -34,9 +35,10 @@ public class Detector : MonoBehaviour
         }
 
 
-        Vector3 moveDirection = points[currentIndex].position;
+        Vector3 moveDirection = points[currentIndex].position - transform.position;
         moveDirection.Normalize();
-        if(Vector3.Distance(transform.position , points[currentIndex].position) < changeDistance)
+        dis = Vector3.Distance(transform.position , points[currentIndex].position) ;
+        if(dis < changeDistance)
         {
             currentIndex++;
             if(currentIndex > 1) currentIndex = 0;
