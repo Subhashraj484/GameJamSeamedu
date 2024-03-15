@@ -1,19 +1,17 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using Unity.PlasticSCM.Editor.WebApi;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class ColorDetector : MonoBehaviour
 {
+    public event Action<Color> OnChnageColor;
     float timer ;
     List<Color> colors = new();
     Color originalColor;
     Color buildingColor;
 
     Transform currentCollidedBuilding = null;
-    SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer;
     bool colormatch;
     bool changeColor;
     bool hide;
@@ -33,7 +31,9 @@ public class ColorDetector : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.LeftShift))
         {
             changeColor = true;
-            spriteRenderer.color = buildingColor;
+            // spriteRenderer.color = buildingColor;
+                OnChnageColor?.Invoke(buildingColor);
+
             hide = true;
 
             
@@ -47,7 +47,9 @@ public class ColorDetector : MonoBehaviour
             {
                 timer = 0;
                 colormatch = false;
-                spriteRenderer.color = originalColor;
+                // spriteRenderer.color = originalColor;
+                OnChnageColor?.Invoke(originalColor);
+
                 currentCollidedBuilding = null;
                 changeColor = false;
                 hide = false;
@@ -90,7 +92,9 @@ public class ColorDetector : MonoBehaviour
         {
             if(currentCollidedBuilding != other.transform) return;
 
-            spriteRenderer.color = originalColor;
+            // spriteRenderer.color = originalColor;
+                OnChnageColor?.Invoke(originalColor);
+
             hide = false;
         }
     }
